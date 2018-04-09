@@ -1,0 +1,14 @@
+tqdm
+matplotlib
+requests
+nltk
+torch
+torchvision
+jupyter
+h5py
+tensorflow
+numpy
+keras
+pillow
+pandas
+more_itertools
