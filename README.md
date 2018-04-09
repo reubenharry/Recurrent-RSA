@@ -23,14 +23,7 @@ Summary:
 
 Setup:
 
-	**I haven't yet included a neural model in the code, so you won't be able to run the code at the moment **
-
-	To run the model:
-
-		requirements:
-
-			-- python3
-			-- jupyter (if you want to use the notebook)
+To run the model, you'll need python3.6, and to have cloned the repo with git lfs. Run main.py - you can supply urls for your own images, but on the current settings, the captions probably won't be great (needs beam search, and the example uses greedy)
 
 
 
