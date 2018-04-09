@@ -1,0 +1,6 @@
+data/models/coco-decoder-5-3000.pkl filter=lfs diff=lfs merge=lfs -text
+data/models/coco-encoder-5-3000.pkl filter=lfs diff=lfs merge=lfs -text
+data/models/lang_mod-decoder-5-3000.pkl filter=lfs diff=lfs merge=lfs -text
+data/models/lang_mod-encoder-5-3000.pkl filter=lfs diff=lfs merge=lfs -text
+data/models/vg-decoder-5-3000.pkl filter=lfs diff=lfs merge=lfs -text
+data/models/vg-encoder-5-3000.pkl filter=lfs diff=lfs merge=lfs -text
