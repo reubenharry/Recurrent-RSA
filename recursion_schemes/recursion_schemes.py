@@ -84,73 +84,22 @@ def ana_greedy(rsa,initial_world_prior,speaker_rationality,speaker, target, pass
 		prob = np.max(s)
 		probs.append(prob)
 
-		# updates the sentence
-		# print(segment)
-		# print(rsa.idx2seg[segment])
-		
-		# update image prior according to listener
-		# print("WORLD",world)
-		# STATE UPDATING DISABLED
-		# if depth>0 and pass_prior:
-		if True:
-			# state.context_sentence = list('^a double decker ')
-			# s = rsa.initial_speakers[0].forward(state=state,world=world)
-			# print("s",rsa.idx2seg[np.argmax(s)],np.max(s))
-
-			# world.target=1
-			# state.context_sentence = list('^a double decker ')
-			# s = rsa.initial_speakers[0].forward(state=state,world=world)
-			# print("s",rsa.idx2seg[np.argmax(s)],np.max(s))
-
-			# ['^','a',' ']
-			# state.context_sentence = list('^a double decker ')
-			# print(state.context_sentence)
-			# l_simple = np.exp(rsa.listener_simple(state=state,utterance=rsa.seg2idx[segment],depth=0))
-			# l_complex = np.exp(rsa.listener(state=state,utterance=rsa.seg2idx[segment],depth=0))
-			# print("HAVING HEARD r:", np.exp(l_simple))
-			# l = np.exp(rsa.listener(state=state,utterance=rsa.seg2idx[segment],depth=0))
-
-			# print("listener simple:",l_simple,timestep)
-			# print("")
-			# print("HAVING HEARD r:", np.exp(l))
-
-			# state.context_sentence = list()
-			# ['^','a',' ']
-			# l_simple = rsa.listener_simple(state=state,utterance=rsa.seg2idx['y'],depth=0)
-			# print("HAVING HEARD y:",np.exp(l_simple))
-			# l = rsa.listener(state=state,utterance=rsa.seg2idx['y'],depth=0)
-			# print("HAVING HEARD y:",np.exp(l))
-
-			# raise Exception
+		if pass_prior:
 
 			l = rsa.listener(state=state,utterance=segment,depth=depth)
-			# print("listener complex",np.exp(l),timestep)
 			state.world_priors[state.timestep]=l
-			# print(state.world_priors[:5])
-			# state.world_priors[state.timestep]=np.expand_dims(np.expand_dims(l,-1),-1)
-		# print("L:",l)
 		state.context_sentence += [rsa.idx2seg[segment]]
 		if (rsa.idx2seg[segment] == stop_token[rsa.seg_type]):
 			break
 
-	# print(state.image_priors[:])
 	summed_probs = np.sum(np.asarray(probs))
 
 	world_posterior = state.world_priors[:state.timestep+1][:5]
 
-	# print("".join(state.context_sentence))
-	# print("JOINT",np.squeeze(np.exp(world_posterior)))
-	print("MARGINAL IMAGE",np.sum(np.sum(np.exp(world_posterior),axis=state.dim["speaker"]+1),axis=state.dim["rationality"]+1) )
-	print("MARGINAL RATIONALITY",np.sum(np.sum(np.exp(world_posterior),axis=state.dim["speaker"]+1),axis=state.dim["image"]+1) )
-	print("MARGINAL SPEAKER",np.sum(np.sum(np.exp(world_posterior),axis=state.dim["rationality"]+1),axis=state.dim["image"]+1) )
-
-
 	return [("".join(state.context_sentence),summed_probs)]
 
-#beam search anamorphism
 #But within the n-th order ethno-metapragmatic perspective, this creative indexical effect is the motivated realization, or performable execution, of an already constituted framework of semiotic value.
-# def ana_beam(rsa, pass_prior=True, speaker_rationality=1.0, listener_rationality=1.0, beam_width=len(sym_set),cut_rate=1,decay_rate=0.0,beam_decay=0,depth=0,start_from=[],which_image=0,,img_prior=np.log(np.asarray([0.5,0.5]))):
-def ana_beam(rsa,initial_world_prior,speaker_rationality, target, pass_prior=True,listener_rationality=1.0,depth=0,start_from=[],beam_width=len(sym_set),cut_rate=1,decay_rate=0.0,beam_decay=0,):
+def ana_beam(rsa,initial_world_prior,speaker_rationality, target,speaker, pass_prior=True,listener_rationality=1.0,depth=0,start_from=[],beam_width=len(sym_set),cut_rate=1,decay_rate=0.0,beam_decay=0,):
 	"""
 	speaker_rationality,listener_rationality: 
 		
@@ -179,7 +128,7 @@ def ana_beam(rsa,initial_world_prior,speaker_rationality, target, pass_prior=Tru
 	state.context_sentence=context_sentence
 
 
-	world=RSA_World(target=target,rationality=speaker_rationality,speaker=0)
+	world=RSA_World(target=target,rationality=speaker_rationality,speaker=speaker)
 
 
 
@@ -290,6 +239,5 @@ def ana_beam(rsa,initial_world_prior,speaker_rationality, target, pass_prior=Tru
 
 			output.append(("".join(sent),prob))
 
-		print(state.world_priors)
 		return output
 

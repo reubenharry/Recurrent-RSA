@@ -1,3 +1,5 @@
+# this code will generate a literal caption and a pragmatic caption (referring expression) for the first of the urls provided in the context of the rest
+
 import matplotlib
 matplotlib.use('Agg')
 import re
@@ -20,10 +22,13 @@ urls = [
 	"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/First_Student_IC_school_bus_202076.jpg/220px-First_Student_IC_school_bus_202076.jpg"
 	]
 
-# code is written to be able to jointly infer speaker's rationality and neural model
+# code is written to be able to jointly infer speaker's rationality and neural model, but for simplicity, let's assume these are fixed
+# the rationality of the S1
 rat = [100.0]
+# the neural model: captions trained on MSCOCO ("coco") are more verbose than VisualGenome ("vg")
 model = ["vg"]
 number_of_images = len(urls)
+# the model starts of assuming it's equally likely any image is the intended referent
 initial_image_prior=uniform_vector(number_of_images)
 initial_rationality_prior=uniform_vector(1)
 initial_speaker_prior=uniform_vector(1)
@@ -35,7 +40,7 @@ speaker_model.initialize_speakers(model)
 # set the possible images and rationalities
 speaker_model.speaker_prior.set_features(images=urls,tf=False,rationalities=rat)
 speaker_model.initial_speakers[0].set_features(images=urls,tf=False,rationalities=rat)
-# generate a sentence by unfolding stepwise, from the speaker
+# generate a sentence by unfolding stepwise, from the speaker: greedy unrolling used here, not beam search: much better to use beam search generally
 literal_caption = ana_greedy(
 	speaker_model,
 	target=0,
